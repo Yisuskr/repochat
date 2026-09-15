@@ -1,0 +1,124 @@
+{
+  "name": "repochat",
+  "displayName": "RepoChat",
+  "description": "VS Code-native repository chat with source-aware collaboration primitives.",
+  "version": "0.0.1",
+  "publisher": "repochat",
+  "icon": "resources/repochat-icon.png",
+  "preview": true,
+  "license": "MIT",
+  "author": "RepoChat",
+  "homepage": "https://github.com/Yisuskr/repochat#readme",
+  "bugs": {
+    "url": "https://github.com/Yisuskr/repochat/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Yisuskr/repochat.git"
+  },
+  "keywords": [
+    "vscode",
+    "extension",
+    "chat",
+    "collaboration",
+    "git",
+    "github",
+    "repository",
+    "developer-tools"
+  ],
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "extensionKind": [
+    "ui"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "RepoChat can render its view in untrusted workspaces, but Git metadata detection and source sharing are intended for trusted local repositories."
+    }
+  },
+  "galleryBanner": {
+    "color": "#111216",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onView:repochat.chatView",
+    "onCommand:repochat.refreshRepository",
+    "onCommand:repochat.shareSelection"
+  ],
+  "main": "./out/src/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "repochat",
+          "title": "RepoChat",
+          "icon": "resources/repochat.svg"
+        }
+      ]
+    },
+    "views": {
+      "repochat": [
+        {
+          "id": "repochat.chatView",
+          "name": "Chat",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "repochat.refreshRepository",
+        "title": "RepoChat: Refresh Repository"
+      },
+      {
+        "command": "repochat.shareSelection",
+        "title": "Share in RepoChat",
+        "category": "RepoChat"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "repochat.shareSelection",
+          "when": "editorHasSelection",
+          "group": "navigation@10"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "repochat.refreshRepository",
+          "when": "view == repochat.chatView",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\"",
+    "secrets:check": "node scripts/check-no-secrets.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "package:vsix": "pnpm run check && node -e \"require('fs').mkdirSync('dist', { recursive: true })\" && vsce package --out dist/repochat-0.0.1.vsix",
+    "test": "pnpm run compile && node --test \"out/test/**/*.test.js\"",
+    "check": "pnpm run lint && pnpm run format:check && pnpm run secrets:check && pnpm run test"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.9.0",
+    "@types/node": "22.7.4",
+    "@types/vscode": "1.90.0",
+    "@vscode/vsce": "3.6.0",
+    "eslint": "9.9.0",
+    "prettier": "3.3.3",
+    "typescript": "5.6.2",
+    "typescript-eslint": "8.4.0"
+  },
+  "packageManager": "pnpm@11.19.0"
+}
